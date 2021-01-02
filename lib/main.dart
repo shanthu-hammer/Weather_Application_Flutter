@@ -18,13 +18,24 @@ class _HomeState extends State<Home> {
   var description;
   var humidity;
   var windSpeed;
+  var currently;
   Future getWeather() async {
     http.Response response = await http.get(
         'http://api.openweathermap.org/data/2.5/weather?q=Boston&appid=e4f4155edcfc7211e48c02b040451d01');
     var results = jsonDecode(response.body);
     setState(() {
-     this.temp = results['main']
+      this.temp = results['main']['temp'];
+      this.description = results['weather'][0]['description'];
+      this.currently = results['weather'][0]['main'];
+      this.humidity = results['main']['humidity'];
+      this.windSpeed = results['wind']['speed'];
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.getWeather();
   }
 
   @override
@@ -49,7 +60,7 @@ class _HomeState extends State<Home> {
                           fontWeight: FontWeight.w600)),
                 ),
                 Text(
-                  "52 \u00B0",
+                  temp != null ? temp.toString() + " \u00B0" : 'loading...',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 40.0,
@@ -57,7 +68,8 @@ class _HomeState extends State<Home> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 10.0),
-                  child: Text('Currently in Boston ',
+                  child: Text(
+                      currently != null ? currently.toString() : 'loading...',
                       style: TextStyle(
                           fontSize: 14.0,
                           color: Colors.white,
@@ -74,22 +86,29 @@ class _HomeState extends State<Home> {
                     ListTile(
                       leading: FaIcon(FontAwesomeIcons.thermometerHalf),
                       title: Text('Temperature'),
-                      trailing: Text('52 \u00b0'),
+                      trailing:
+                          Text(temp != null ? temp.toString() : 'loading...'),
                     ),
                     ListTile(
                       leading: FaIcon(FontAwesomeIcons.cloud),
                       title: Text('Weather'),
-                      trailing: Text('wheather'),
+                      trailing: Text(description != null
+                          ? description.toString()
+                          : 'loading...'),
                     ),
                     ListTile(
                       leading: FaIcon(FontAwesomeIcons.sun),
-                      title: Text('Temperature'),
-                      trailing: Text('33'),
+                      title: Text('Humidity'),
+                      trailing: Text(humidity != null
+                          ? humidity.toString()
+                          : 'loading...'),
                     ),
                     ListTile(
                       leading: FaIcon(FontAwesomeIcons.wind),
-                      title: Text('Temperature'),
-                      trailing: Text('12'),
+                      title: Text('Wind speed'),
+                      trailing: Text(windSpeed != null
+                          ? windSpeed.toString()
+                          : 'loading...'),
                     ),
                   ],
                 )),
