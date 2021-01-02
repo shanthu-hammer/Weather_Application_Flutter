@@ -10,7 +10,9 @@ void main() => runApp(MaterialApp(
 
 class Home extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  State<StatefulWidget> createState() {
+    return _HomeState();
+  }
 }
 
 class _HomeState extends State<Home> {
