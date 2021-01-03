@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as https;
 import 'dart:convert';
 
 void main() => runApp(MaterialApp(
@@ -21,10 +21,10 @@ class _HomeState extends State<Home> {
   var humidity;
   var windSpeed;
   var currently;
-  Future getWeather() async {
-    http.Response response = await http.get(
+  Future<Map> getWeather() async {
+    https.Response response = await https.get(
         'http://api.openweathermap.org/data/2.5/weather?q=Boston&appid=e4f4155edcfc7211e48c02b040451d01');
-    var results = jsonDecode(response.body);
+    var results = json.decode(response.body);
     setState(() {
       this.temp = results['main']['temp'];
       this.description = results['weather'][0]['description'];
